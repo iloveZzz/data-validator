@@ -1,0 +1,32 @@
+规则引擎 {
+            添加规则 {
+                name 'test1'
+                description '测试一个规则1'
+                priority 1
+                when { facts -> true }
+                then { facts ->
+                    System.out.println("test 1 rule!")
+                }
+                build()
+            }
+            添加规则 {
+                name('test2')
+                description '测试一个规则2'
+                priority 1
+                when { facts -> true }
+                then { facts ->
+                    System.out.println("test 2 rule!")
+                }
+                build()
+            }
+            添加规则 {
+                name('test3')
+                description '测试一个规则3'
+                priority 3
+                when { facts -> true }
+                then { facts ->
+                    System.out.println("test 3 rule!")
+                }
+                build()
+            }
+}
