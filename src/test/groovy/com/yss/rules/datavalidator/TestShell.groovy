@@ -1,5 +1,6 @@
 package com.yss.rules.datavalidator
 
+import com.yss.rules.datavalidator.engine.RulesEngineBuild
 import org.codehaus.groovy.control.CompilerConfiguration
 
 /**
@@ -8,11 +9,12 @@ import org.codehaus.groovy.control.CompilerConfiguration
 class TestShell extends RulesEngineBuild{
     @Override
     Object run() {
-        String script = readFileContent("C:\\Users\\daomingzhu\\data-validator\\src\\main\\groovy\\com\\yss\\rules\\datavalidator\\RuleFile");
+        String script = readFileContent("src/main/resources/RuleFile");
         def config = new CompilerConfiguration()
         config.setScriptBaseClass(RulesEngineBuild.class.getName())
         new GroovyShell(this.class.classLoader,config).evaluate(script)
     }
+
     static String readFileContent(String fileName) {
         File file = new File(fileName);
         BufferedReader reader = null;

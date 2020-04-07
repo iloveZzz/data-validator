@@ -1,4 +1,4 @@
-package com.yss.rules.datavalidator
+package com.yss.rules.datavalidator.engine
 
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.core.DefaultRulesEngine
@@ -15,5 +15,6 @@ abstract class RulesEngineBuild extends Script{
 
         DefaultRulesEngine rulesEngine = new DefaultRulesEngine();
         rulesEngine.fire(ruleConfig.rs,new Facts())
+        return rulesEngine
     }
 }

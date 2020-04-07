@@ -1,4 +1,4 @@
-package com.yss.rules.datavalidator.rules;
+package com.yss.rules.datavalidator;
 
 import org.jeasy.rules.api.*;
 import org.jeasy.rules.core.DefaultRulesEngine;
@@ -21,23 +21,25 @@ public class TestRule {
                 .name("a rule")
                 .description("测试A规则")
                 .when(facts -> facts.get("ttt")!=null&&facts.get("ttt").equals(true))
-                .then(facts -> System.out.println("A-1规则通过"))
-                .when(facts -> facts.get("ranA")!=null&&facts.get("ran").equals(true))
-                .then(facts -> System.out.println("A-2规则通过!"))
+                .then(facts -> System.out.println("It, ttt an hahahahahaha!"))
+                .when(facts -> facts.get("ran")!=null&&facts.get("ran").equals(true))
+                .then(facts -> System.out.println("It, rain an hahahahahaha!"))
                 .build();
         Rule b = new RuleBuilder()
                 .priority(2)
                 .name("b rule")
                 .description("测试B规则")
                 .when(facts -> facts.get("ttt").equals(true))
-                .then(facts -> System.out.println("B规则通过!!"))
+                .then(facts -> System.out.println("It, take an 222!"))
+                .then(facts -> System.out.println("It, take an 5555!"))
                 .build();
         Rule c = new RuleBuilder()
                 .priority(1)
                 .name("c rule")
                 .description("测试C规则")
                 .when(facts -> facts.get("eee")!=null&&facts.get("eee").equals(true))
-                .then(facts -> System.out.println("C规则通过!"))
+                .then(facts -> System.out.println("It, take an 333!"))
+                .then(facts -> System.out.println("It, take an 444!"))
                 .build();
         try {
 
@@ -65,7 +67,7 @@ public class TestRule {
                 @Override
                 public void afterEvaluate(Rule rule, Facts facts, boolean evaluationResult) {
                     if (!evaluationResult){
-                        System.out.println(rule.evaluate(facts));
+                        System.out.println(rule);
                         System.out.println("错误！！！"+evaluationResult);
                     }
                 }
