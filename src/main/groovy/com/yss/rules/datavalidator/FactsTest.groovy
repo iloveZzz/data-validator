@@ -15,6 +15,9 @@ class FactsTest {
 
         println(f.ran)
         println(f.user.name)
+
+        def binding = ["firstname":"Sam", "lastname":"Pullara", "city":"San Francisco", "month":"December", "signed":"Groovy-Dev"]
+        println(binding)
     }
     static class User{
         User(name,age){

@@ -1,4 +1,4 @@
-package com.yss.rules.datavalidator.engine;
+package com.yss.rules.datavalidator.engine.rule;
 
 import org.jeasy.rules.api.Action;
 import org.jeasy.rules.api.Condition
@@ -12,7 +12,7 @@ import org.jeasy.rules.core.BasicRule;
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
-class RuleBuilderCc  extends BasicRule{
+class NewRuleBuilder extends BasicRule{
 
     private String name = DEFAULT_NAME;
     private String description = DEFAULT_DESCRIPTION;
@@ -21,10 +21,10 @@ class RuleBuilderCc  extends BasicRule{
     private Condition condition = Condition.FALSE;
     private List<Action> actions = new ArrayList<>();
 
-    RuleBuilderCc() {
+    NewRuleBuilder() {
     }
 
-    RuleBuilderCc(String name, String description, int priority, Condition condition, List<Action> actions) {
+    NewRuleBuilder(String name, String description, int priority, Condition condition, List<Action> actions) {
         super(name, description, priority)
         this.condition = condition
         this.actions = actions
@@ -35,7 +35,7 @@ class RuleBuilderCc  extends BasicRule{
      * @param name of the rule
      * @return the builder instance
      */
-    RuleBuilderCc 规则名(String name) {
+    NewRuleBuilder 规则名(String name) {
         this.name = name;
         return this;
     }
@@ -46,7 +46,7 @@ class RuleBuilderCc  extends BasicRule{
      * @param description of the rule
      * @return the builder instance
      */
-    RuleBuilderCc 描述(String description) {
+    NewRuleBuilder 描述(String description) {
         this.description = description;
         return this;
     }
@@ -57,7 +57,7 @@ class RuleBuilderCc  extends BasicRule{
      * @param priority of the rule
      * @return the builder instance
      */
-    RuleBuilderCc 优先级(int priority) {
+    NewRuleBuilder 优先级(int priority) {
         this.priority = priority;
         return this;
     }
@@ -68,7 +68,7 @@ class RuleBuilderCc  extends BasicRule{
      * @param condition of the rule
      * @return the builder instance
      */
-    RuleBuilderCc 如果(Condition condition) {
+    NewRuleBuilder 如果(Condition condition) {
         this.condition = condition;
         return this;
     }
@@ -79,7 +79,7 @@ class RuleBuilderCc  extends BasicRule{
      * @param action to add
      * @return the builder instance
      */
-    RuleBuilderCc 那么(Action action) {
+    NewRuleBuilder 那么(Action action) {
         this.actions.add(action);
         return this;
     }
@@ -90,7 +90,7 @@ class RuleBuilderCc  extends BasicRule{
      * @return a new rule instance
      */
     Rule 结束() {
-        return new RuleBuilderCc(this.name,this.description,this.priority,condition,actions)
+        return new NewRuleBuilder(this.name,this.description,this.priority,condition,actions)
     }
     @Override
     boolean evaluate(Facts facts) {

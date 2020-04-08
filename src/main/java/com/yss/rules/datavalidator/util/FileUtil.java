@@ -1,21 +1,16 @@
-package com.yss.rules.datavalidator
+package com.yss.rules.datavalidator.util;
 
-import com.yss.rules.datavalidator.engine.rule.RulesEngine
-import org.codehaus.groovy.control.CompilerConfiguration
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
- * @author daomingzhu* @date 2020/4/7 19:53
+ * @author daomingzhu
+ * @date 2020/4/8 16:32
  */
-class TestShell extends RulesEngine{
-    @Override
-    Object run() {
-        String script = readFileContent("src/main/resources/RuleFile");
-        def config = new CompilerConfiguration()
-        config.setScriptBaseClass(RulesEngine.class.getName())
-        new GroovyShell(this.class.classLoader,config).evaluate(script)
-    }
-
-    static String readFileContent(String fileName) {
+public class FileUtil {
+   public static String readFileContent(String fileName) {
         File file = new File(fileName);
         BufferedReader reader = null;
         StringBuffer sbf = new StringBuffer();
@@ -40,6 +35,4 @@ class TestShell extends RulesEngine{
         }
         return sbf.toString();
     }
-
-
 }
