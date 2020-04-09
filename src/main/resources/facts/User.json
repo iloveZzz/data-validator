@@ -1,0 +1,31 @@
+{
+  "姓名": {
+    "type": "String",
+    "field":"name",
+    "defaultVal": ""
+  },
+  "年龄": {
+    "type": "Integer",
+    "field":"age",
+    "defaultVal": ""
+  },
+  "生日": {
+    "type": "Date",
+    "field":"birthday"
+  },
+  "生日(YYYY-MM-DD)": {
+    "type": "String",
+    "field":"birthdayYYYYMMDD",
+    "expression":"format('birthday','YYYY-MM-DD')}"
+  },
+  "地址": {
+    "type": "String",
+    "field":"attr",
+    "defaultVal": ""
+  },
+  "是否成年": {
+    "type": "String",
+    "field":"isAdult",
+    "defaultVal": false
+  }
+}
