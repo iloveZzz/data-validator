@@ -11,12 +11,13 @@
   },
   "生日": {
     "type": "Date",
-    "field":"birthday"
+    "field":"birthday",
+    "expression":"format('birthday','yyyyMMdd HH:mm:ss')"
   },
   "生日(YYYY-MM-DD)": {
     "type": "String",
     "field":"birthdayYYYYMMDD",
-    "expression":"format('birthday','YYYY-MM-DD')}"
+    "expression":"format('birthday','yyyyMMdd HH:mm:ss')"
   },
   "地址": {
     "type": "String",
@@ -26,6 +27,6 @@
   "是否成年": {
     "type": "String",
     "field":"isAdult",
-    "defaultVal": false
+    "expression":"age>17?true:false"
   }
 }

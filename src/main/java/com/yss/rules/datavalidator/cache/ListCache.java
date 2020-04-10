@@ -12,8 +12,6 @@ public class ListCache<T,E extends Collection<T>> extends BaseCache<E> {
     private final LoadingCache<String, E> lsCache;
     public ListCache(){
         lsCache  = CacheBuilder.newBuilder()
-                .maximumWeight(100000)
-                .weigher((Weigher<String, E>) (k, v) -> v.size())
                 .build(
                         new CacheLoader<String, E>() {
                             public  E load(String key) { // no checked exception
@@ -21,9 +19,11 @@ public class ListCache<T,E extends Collection<T>> extends BaseCache<E> {
                             }
                         });
     }
-    public  void set(String key,E collection){
+    @Override
+    public  void set(String key, E collection){
         lsCache.put(key,collection);
     }
+    @Override
     public  E get(String key){
         return lsCache.getIfPresent(key);
     }

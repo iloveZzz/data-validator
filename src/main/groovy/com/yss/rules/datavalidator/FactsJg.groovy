@@ -4,19 +4,21 @@ import com.google.common.collect.Lists
 import com.google.common.collect.Maps
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.yss.rules.datavalidator.cache.CacheManager
+import com.yss.rules.datavalidator.cache.ObjectCache
 import com.yss.rules.datavalidator.domain.FactsService
 import com.yss.rules.datavalidator.model.BusFieldModel
 import com.yss.rules.datavalidator.shell.FactsScriptEngine
 import com.yss.rules.datavalidator.util.FileUtil
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 /**
  * @author daomingzhu* @date 2020/4/9 11:35
  */
 class FactsJg {
-
     static void main(String[] args) {
+        ObjectCache<Script> objectCache = CacheManager.configCacheType(ObjectCache.class)
         def sharedData = new Binding()
         sharedData.setVariable("thant",1000)
         def factsScriptEngine = new FactsScriptEngine(sharedData)
@@ -27,16 +29,19 @@ class FactsJg {
         Map<String,BusFieldModel> bf = new Gson().fromJson(result, new TypeToken<Map<String,BusFieldModel>>() {}.getType())
 
         List<Map<String,Object>> tt = Lists.newArrayList()
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 10000; i++) {
             def d = Maps.newHashMap();
             d.put("name","dmz"+i)
-            d.put("birthday",LocalDate.now())
+            d.put("age",(15+i))
+            d.put("birthday", LocalDateTime.now())
             tt.add(d)
         }
-        Script script=factsScriptEngine.parse("format(source,'YYYY-MM-DD')")
+
         def start = System.currentTimeMillis()
         def map = new FactsService().generateFactMap(bf, tt, { source, fieldModel ->
-            fieldModel.getExpression()
+            Script script = objectCache.getIfNull(fieldModel.getExpression(),
+                    { -> factsScriptEngine.parse(fieldModel.getExpression()) })
+            source.forEach({k,v->script.setProperty(k,v)})
             script.setProperty("source",source)
             script.setProperty("fieldModel",fieldModel)
             script.run()
@@ -48,10 +53,5 @@ class FactsJg {
 //        println(bf['生日(YYYY-MM-DD)'])
 //        println(result)
 
-    }
-
-    static warpBusDataModel(String content){
-        def wapStr = '"""'
-        wapStr.concat(content).concat(wapStr)
     }
 }

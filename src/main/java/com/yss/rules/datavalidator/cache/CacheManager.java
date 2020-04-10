@@ -1,0 +1,50 @@
+package com.yss.rules.datavalidator.cache;
+
+import com.google.common.collect.Maps;
+import com.yss.rules.datavalidator.cache.base.BaseCache;
+
+import java.lang.reflect.Constructor;
+import java.util.Map;
+
+/**
+ * @author daomingzhu
+ * @date 2020/4/10 12:59
+ */
+public final class CacheManager<E> {
+    private final static Map<String,Object> MAP_INSTANCE = Maps.newConcurrentMap();
+    public static <T extends BaseCache> T configCacheType(Class<T> cls){
+        try {
+            Object rt = MAP_INSTANCE.get(cls.getName());
+            if (MAP_INSTANCE.get(cls.getName())!=null){
+                return (T) rt;
+            }
+            T t = new ReflectiveFactory<T>(cls).newInstance();
+            MAP_INSTANCE.put(cls.getName(),t);
+            return t;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    static class ReflectiveFactory<T extends BaseCache> {
+
+        private final Constructor<? extends T> constructor;
+
+        public ReflectiveFactory(Class<? extends T> clazz) {
+            try {
+                this.constructor = clazz.getConstructor();
+            } catch (NoSuchMethodException e) {
+                throw new IllegalArgumentException("Class does not have a public non-arg constructor", e);
+            }
+        }
+
+        T newInstance() throws Exception {
+            try {
+                return constructor.newInstance();
+            } catch (Throwable t) {
+                throw new Exception("Unable to create Channel from class " + constructor.getDeclaringClass(), t);
+            }
+        }
+
+    }
+}

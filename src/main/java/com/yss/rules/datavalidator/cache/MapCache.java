@@ -12,8 +12,6 @@ public class MapCache<V,E extends Map<String,V>> extends BaseCache<E> {
     private final LoadingCache<String, E> mapCache;
     public MapCache(){
         mapCache  = CacheBuilder.newBuilder()
-                .maximumWeight(maximumWeight)
-                .weigher((Weigher<String, E>) (k, v) -> v.size())
                 .build(
                         new CacheLoader<String, E>() {
                             public  E load(String key) { // no checked exception
