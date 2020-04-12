@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken
 import com.yss.rules.datavalidator.cache.CacheManager
 import com.yss.rules.datavalidator.cache.ObjectCache
 import com.yss.rules.datavalidator.domain.FactsService
+import com.yss.rules.datavalidator.dto.User
 import com.yss.rules.datavalidator.model.BusFieldModel
 import com.yss.rules.datavalidator.shell.FactsScriptEngine
 import com.yss.rules.datavalidator.util.FileUtil
@@ -29,16 +30,27 @@ class FactsJg {
         Map<String,BusFieldModel> bf = new Gson().fromJson(result, new TypeToken<Map<String,BusFieldModel>>() {}.getType())
 
         List<Map<String,Object>> tt = Lists.newArrayList()
+        List<User> uu = Lists.newArrayList()
         for (int i = 0; i < 10000; i++) {
             def d = Maps.newHashMap();
             d.put("name","dmz"+i)
             d.put("age",(15+i))
             d.put("birthday", LocalDateTime.now())
             tt.add(d)
+
+            uu.add(new User("dmz"+i,15,new Date()))
         }
 
         def start = System.currentTimeMillis()
-        def map = new FactsService().generateFactMap(bf, tt, { source, fieldModel ->
+//        def map = new FactsService().generateFactMap(bf, tt, { source, fieldModel ->
+//            Script script = objectCache.getIfNull(fieldModel.getExpression(),
+//                    { -> factsScriptEngine.parse(fieldModel.getExpression()) })
+//            source.forEach({k,v->script.setProperty(k,v)})
+//            script.setProperty("source",source)
+//            script.setProperty("fieldModel",fieldModel)
+//            script.run()
+//        })
+        def cc = new FactsService().generateFact(bf,uu,{ source, fieldModel ->
             Script script = objectCache.getIfNull(fieldModel.getExpression(),
                     { -> factsScriptEngine.parse(fieldModel.getExpression()) })
             source.forEach({k,v->script.setProperty(k,v)})
