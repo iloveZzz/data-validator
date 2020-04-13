@@ -1,6 +1,9 @@
 package com.yss.rules.datavalidator.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Date;
 
@@ -9,6 +12,9 @@ import java.util.Date;
  * @date 2020/4/9 9:53
  */
 @Data
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     private String name;
     private Integer age;

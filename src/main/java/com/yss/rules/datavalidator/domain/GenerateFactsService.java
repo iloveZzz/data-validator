@@ -2,13 +2,12 @@ package com.yss.rules.datavalidator.domain;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.yss.rules.datavalidator.dto.User;
 import com.yss.rules.datavalidator.model.BusFieldModel;
+import org.springframework.cglib.beans.BeanMap;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -21,7 +20,8 @@ import java.util.stream.Collectors;
 public class GenerateFactsService {
     public List<Map<String,Object>> generateFactMap(Map<String, BusFieldModel> businessSchema,
                                                     List<Map<String,Object>> data,
-                                                    BiFunction<Map<String, Object>,BusFieldModel,Objects> expression){
+                                                    BiFunction<Map<String, Object>,
+                                                            BusFieldModel,Objects> expression){
 
        return data.stream().map(source->{
             Map<String,Object> r = Maps.newHashMapWithExpectedSize(businessSchema.size());
@@ -34,11 +34,11 @@ public class GenerateFactsService {
         }).collect(Collectors.toList());
     }
 
-    public <T> Map<String,Object> generateFact(Map<String, BusFieldModel> businessSchema,
-                                               List<T> data){
-        Map<String,Object> r = Maps.newHashMapWithExpectedSize(businessSchema.size());
-        businessSchema.forEach((k,v)-> r.put(v.getField(),v.getDefaultVal()));
-        return r;
+    public List<Map<String,Object>> generateFact(Map<String, BusFieldModel> businessSchema,
+                                               List<Object> data,
+                                               BiFunction<Map<String, Object>,BusFieldModel,Objects> expression){
+        List<Map<String,Object>> mps = data.stream().map(t -> (Map<String,Object>)BeanMap.create(t)).collect(Collectors.toList());
+        return generateFactMap(businessSchema,mps,expression);
     }
 
     private BusinessHandler handler;
