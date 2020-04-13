@@ -2,7 +2,6 @@ package com.yss.rules.datavalidator.model;
 
 
 import com.yss.rules.datavalidator.model.base.FactField;
-import lombok.Data;
 
 /**
  * 事实字段聚合
@@ -12,7 +11,7 @@ import lombok.Data;
 public class FactFieldFilterAgg  extends FactField{
     private String aggFunc;
     private String aggField;
-    private String filter;
+    private String filterExpress;
     public FactFieldFilterAgg(String field, String fieldName, String type, Object defaultVal) {
         super(field, fieldName, type, defaultVal);
     }
@@ -34,10 +33,10 @@ public class FactFieldFilterAgg  extends FactField{
     }
 
     public String getFilter() {
-        return filter;
+        return filterExpress;
     }
 
     public void setFilter(String filter) {
-        this.filter = filter;
+        this.filterExpress = filter;
     }
 }

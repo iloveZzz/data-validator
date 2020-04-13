@@ -13,6 +13,7 @@ import com.yss.rules.datavalidator.shell.FactsScriptEngine
 import com.yss.rules.datavalidator.util.FileUtil
 
 import java.time.LocalDateTime
+import java.util.stream.Collectors
 
 /**
  * @author daomingzhu* @date 2020/4/9 11:35
@@ -57,6 +58,23 @@ class FactsJg {
                 source.forEach({k,v->script.setProperty(k,v)})
                 script.setProperty("source",source)
                 script.run()
+        }
+        factModel.aggFunction = { sourceList, fieldFilterAgg ->
+            //过滤数据
+            if (fieldFilterAgg.filterExpress){
+                sourceList = sourceList.stream().filter({ m ->
+                    Script script = objectCache.getIfNull(fieldFilterAgg.filterExpress,{ -> factsScriptEngine.parse(fieldFilterAgg.filterExpress) })
+                    m.forEach({k,v->script.setProperty(k,v)})
+                    script.run()
+                }).collect(Collectors.toList())
+            }
+
+            if (fieldFilterAgg.aggFunc=='SUM'){
+                sourceList.stream().map({ m -> m[fieldFilterAgg.aggField] })
+                        .map({ o -> Objects.nonNull(o) ? BigDecimal.valueOf(o.toString() as double) : BigDecimal.ZERO })
+                        .reduce(BigDecimal.ZERO,{a,v->a.add(v)})
+            }
+
         }
         def start = System.currentTimeMillis()
         def cc = new GenerateFactsService().generateFact(factModel)

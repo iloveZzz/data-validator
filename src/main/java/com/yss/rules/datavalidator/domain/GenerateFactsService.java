@@ -1,18 +1,18 @@
 package com.yss.rules.datavalidator.domain;
 
-import com.google.common.collect.Maps;
 import com.yss.rules.datavalidator.handler.AbstractHandler;
 import com.yss.rules.datavalidator.handler.FactFieldFilterAggHandler;
 import com.yss.rules.datavalidator.handler.FactHandler;
 import com.yss.rules.datavalidator.model.FactCompute;
-import com.yss.rules.datavalidator.model.base.FactField;
 import com.yss.rules.datavalidator.model.FactFieldFilterAgg;
 import com.yss.rules.datavalidator.model.FactModel;
+import com.yss.rules.datavalidator.model.base.FactField;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.function.BiFunction;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -26,8 +26,8 @@ public class GenerateFactsService {
                                                     AbstractHandler<List<Map<String,Object>>,Object> factFilterAggHandler,
                                                     List<Map<String,Object>> sourceData){
         List<Map<String, Object>> rt = sourceData.stream().map(factHandler::doHandler).collect(Collectors.toList());
-        Object o = factFilterAggHandler.doHandler(sourceData);
-
+        Object o = factFilterAggHandler.doHandler(rt);
+        System.out.println(o);
         return rt;
     }
     public List<Map<String,Object>> generateFact(FactModel factModel){

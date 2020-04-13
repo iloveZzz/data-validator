@@ -16,4 +16,7 @@ abstract class AbstractFunc extends Script {
         }
         ''
     }
+    Boolean assertFilter(){
+
+    }
 }

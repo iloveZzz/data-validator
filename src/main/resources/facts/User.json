@@ -40,8 +40,10 @@
   "factFieldFilterAgg": [
     {
       "aggFunc": "SUM",
-      "aggField": "attr",
-      "filter": ""
+      "aggField": "age",
+      "field":"ageSum",
+      "fieldName": "成年求和",
+      "filterExpress": "name !=null && age <=22"
     }
   ]
 }

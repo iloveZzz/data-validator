@@ -12,9 +12,8 @@ import java.util.function.BiFunction;
 /**
  * @author daomingzhu
  */
-public class FactFieldFilterAggHandler<T extends Collection,R>  extends AbstractHandler<T,R> {
+public class FactFieldFilterAggHandler<T extends Collection<Map<String,Object>>,R>  extends AbstractHandler<T,R> {
     private Map<String, FactFieldFilterAgg> factFieldFilterAgg;
-
     public FactFieldFilterAggHandler(Map<String, FactFieldFilterAgg> factFieldFilterAgg, BiFunction express) {
         super(express);
         this.factFieldFilterAgg = factFieldFilterAgg;
@@ -26,11 +25,10 @@ public class FactFieldFilterAggHandler<T extends Collection,R>  extends Abstract
     }
 
     @Override
-    public R doHandler(T t) {
+    public R doHandler(T listMap) {
         Map<String,Object> rt = Maps.newHashMap();
-//        t.stream().reduce()
         factFieldFilterAgg.forEach((k,v)->{
-            rt.put(k,"");
+            rt.put(k,getExpressCall().apply(listMap,v));
         });
         return (R)rt;
     }
