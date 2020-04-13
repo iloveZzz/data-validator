@@ -12,11 +12,12 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 /**
+ * 生成事实对象服务
  * @author daomingzhu
  * @date 2020/4/9 17:46
  */
 @Service
-public class FactsService {
+public class GenerateFactsService {
     public List<Map<String,Object>> generateFactMap(Map<String, BusFieldModel> businessSchema,
                                                     List<Map<String,Object>> data,
                                                     BiFunction<Map<String, Object>,
