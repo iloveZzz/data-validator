@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.yss.rules.datavalidator.cache.CacheManager
 import com.yss.rules.datavalidator.cache.ObjectCache
-import com.yss.rules.datavalidator.domain.FactsService
+import com.yss.rules.datavalidator.domain.GenerateFactsService
 import com.yss.rules.datavalidator.model.BusFieldModel
 import com.yss.rules.datavalidator.shell.FactsScriptEngine
 import com.yss.rules.datavalidator.util.FileUtil
@@ -38,7 +38,7 @@ class FactsJg {
         }
 
         def start = System.currentTimeMillis()
-        def map = new FactsService().generateFactMap(bf, tt, { source, fieldModel ->
+        def map = new GenerateFactsService().generateFactMap(bf, tt, { source, fieldModel ->
             Script script = objectCache.getIfNull(fieldModel.getExpression(),
                     { -> factsScriptEngine.parse(fieldModel.getExpression()) })
             source.forEach({k,v->script.setProperty(k,v)})
