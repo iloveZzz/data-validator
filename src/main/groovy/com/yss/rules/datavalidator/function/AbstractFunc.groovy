@@ -1,9 +1,6 @@
 package com.yss.rules.datavalidator.function
 
-import com.yss.rules.datavalidator.model.BusFieldModel;
-import groovy.lang.Script
 
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter;
 
 /**

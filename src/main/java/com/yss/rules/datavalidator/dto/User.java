@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -18,5 +19,5 @@ import java.util.Date;
 public class User {
     private String name;
     private Integer age;
-    private Date sr;
+    private LocalDateTime birthday;
 }

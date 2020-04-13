@@ -8,7 +8,7 @@ import com.yss.rules.datavalidator.cache.CacheManager
 import com.yss.rules.datavalidator.cache.ObjectCache
 import com.yss.rules.datavalidator.domain.GenerateFactsService
 import com.yss.rules.datavalidator.dto.User
-import com.yss.rules.datavalidator.model.BusFieldModel
+import com.yss.rules.datavalidator.model.FactModel
 import com.yss.rules.datavalidator.shell.FactsScriptEngine
 import com.yss.rules.datavalidator.util.FileUtil
 
@@ -27,7 +27,7 @@ class FactsJg {
         def result = FileUtil.readFileContent("src/main/resources/facts/User.json")
 //        String result = factsScriptEngine.evaluate(warpBusDataModel(content))
 
-        Map<String,BusFieldModel> bf = new Gson().fromJson(result, new TypeToken<Map<String,BusFieldModel>>() {}.getType())
+        FactModel factModel = new Gson().fromJson(result, new TypeToken<FactModel>() {}.getType())
 
         List<Map<String,Object>> tt = Lists.newArrayList()
         List<User> uu = Lists.newArrayList()
@@ -38,10 +38,11 @@ class FactsJg {
             d.put("birthday", LocalDateTime.now())
             tt.add(d)
 
-            uu.add(new User("dmz"+i,15,new Date()))
+            uu.add(new User("dmz"+i,(15+i),LocalDateTime.now()))
         }
 
-        def start = System.currentTimeMillis()
+
+
 //        def map = new FactsService().generateFactMap(bf, tt, { source, fieldModel ->
 //            Script script = objectCache.getIfNull(fieldModel.getExpression(),
 //                    { -> factsScriptEngine.parse(fieldModel.getExpression()) })
@@ -50,14 +51,15 @@ class FactsJg {
 //            script.setProperty("fieldModel",fieldModel)
 //            script.run()
 //        })
-        def cc = new GenerateFactsService().generateFact(bf,uu,{ source, fieldModel ->
-            Script script = objectCache.getIfNull(fieldModel.getExpression(),
-                    { -> factsScriptEngine.parse(fieldModel.getExpression()) })
-            source.forEach({k,v->script.setProperty(k,v)})
-            script.setProperty("source",source)
-            script.setProperty("fieldModel",fieldModel)
-            script.run()
-        })
+        factModel.data = uu
+        factModel.computeFunc = { source, allField ->
+                Script script = objectCache.getIfNull(allField.expression,{ -> factsScriptEngine.parse(allField.expression) })
+                source.forEach({k,v->script.setProperty(k,v)})
+                script.setProperty("source",source)
+                script.run()
+        }
+        def start = System.currentTimeMillis()
+        def cc = new GenerateFactsService().generateFact(factModel)
         def end = System.currentTimeMillis()
         println('执行时间：'+(end-start)/1000+'秒')
 //        println(bf.年龄.defaultVal)

@@ -1,32 +1,47 @@
 {
-  "姓名": {
-    "type": "String",
-    "field":"name",
-    "defaultVal": ""
-  },
-  "年龄": {
-    "type": "Integer",
-    "field":"age",
-    "defaultVal": ""
-  },
-  "生日": {
-    "type": "Date",
-    "field":"birthday",
-    "expression":"format('birthday','yyyyMMdd HH:mm:ss')"
-  },
-  "生日(YYYY-MM-DD)": {
-    "type": "String",
-    "field":"birthdayYYYYMMDD",
-    "expression":"format('birthday','yyyyMMdd HH:mm:ss')"
-  },
-  "地址": {
-    "type": "String",
-    "field":"attr",
-    "defaultVal": ""
-  },
-  "是否成年": {
-    "type": "String",
-    "field":"isAdult",
-    "expression":"age>17?true:false"
-  }
+  "factField": [
+    {
+      "type": "String",
+      "field":"name",
+      "fieldName": "姓名",
+      "defaultVal": ""
+    },
+    {
+      "type": "Integer",
+      "field":"age",
+      "fieldName": "年龄",
+      "defaultVal": ""
+    },
+    {
+      "type": "Date",
+      "field":"birthday",
+      "fieldName": "生日"
+    },
+    {
+      "type": "String",
+      "field":"attr",
+      "fieldName": "地址"
+    }
+  ],
+  "factCompute": [
+    {
+      "type": "String",
+      "field":"birthdayYYYYMMDD",
+      "fieldName": "生日(YYYY-MM-DD)",
+      "expression":"format('birthday','yyyy~MM~dd')"
+    },
+    {
+      "type": "String",
+      "field":"isAdult",
+      "fieldName": "是否成年",
+      "expression":"age>17?true:false"
+    }
+  ],
+  "factFieldFilterAgg": [
+    {
+      "aggFunc": "SUM",
+      "aggField": "attr",
+      "filter": ""
+    }
+  ]
 }
