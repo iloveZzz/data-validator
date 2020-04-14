@@ -14,5 +14,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class FactDTO {
     private List<Map<String,Object>> data;
-    private Object bindVar;
+    private Object filterField;
+    private Object fieldFilterAgg;
 }

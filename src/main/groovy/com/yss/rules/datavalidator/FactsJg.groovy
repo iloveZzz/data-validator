@@ -37,10 +37,13 @@ class FactsJg {
         }
         FactEngine factCall = new FactEngine()
         factModel.data = uu
+        factModel.filterFieldFunc = factCall.filterFieldFunc
         factModel.computeFunc = factCall.computeFunc
         factModel.aggFunction = factCall.aggFunction
         def start = System.currentTimeMillis()
         def cc = new GenerateFactsService().generateFact(factModel)
+        println cc.filterField
+        println cc.fieldFilterAgg
         def end = System.currentTimeMillis()
         println('执行时间：'+(end-start)/1000+'秒')
 //        println(bf.年龄.defaultVal)

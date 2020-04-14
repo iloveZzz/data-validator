@@ -34,7 +34,21 @@
       "type": "String",
       "field":"isAdult",
       "fieldName": "是否成年",
-      "expression":"age>17?true:false"
+      "expression":"if(age>17){true}else{false}"
+    }
+  ],
+  "factFilterField": [
+    {
+      "type": "String",
+      "field":"newField",
+      "fieldName": "敖德萨多",
+      "filterExpress": "name == 'dmz20'"
+    },
+    {
+      "type": "String",
+      "field":"acccc",
+      "fieldName": "ssss",
+      "filterExpress": "name == 'dmz22'&& age == 38"
     }
   ],
   "factFieldFilterAgg": [

@@ -13,10 +13,20 @@ import java.util.stream.Collectors;
 class FactEngine {
     ObjectCache<Script> objectCache = CacheManager.configCacheType(ObjectCache.class)
     FactsScriptShell factsScriptShell = new FactsScriptShell(new Binding())
-    def computeFunc = { source, allField ->
+    def filterFieldFunc = { sourceList, factFilterField ->
+        //过滤数据
+        if (factFilterField.filterExpress){
+            return sourceList.stream().filter({ m ->
+                Script script = objectCache.getIfNull(factFilterField.filterExpress,{ -> factsScriptShell.parse(factFilterField.filterExpress) })
+                m.forEach({k,v->script.setProperty(k,v)})
+                script.run()
+            }).collect(Collectors.toList())
+        }
+    }
+    def computeFunc = { sourceList, allField ->
         Script script = objectCache.getIfNull(allField.expression,{ -> factsScriptShell.parse(allField.expression) })
-        source.forEach({k,v->script.setProperty(k,v)});
-        script.setProperty("source",source);
+        sourceList.forEach({k,v->script.setProperty(k,v)});
+        script.setProperty("source",sourceList);
         script.run();
     }
     def aggFunction = { sourceList, fieldFilterAgg ->

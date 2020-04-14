@@ -15,7 +15,9 @@ public class FactModel {
     private List<FactField> factField;
     private List<FactCompute> factCompute;
     private List<FactFieldFilterAgg> factFieldFilterAgg;
+    private List<FactFilterField> factFilterField;
     private List<Object> data;
     private BiFunction computeFunc;
     private BiFunction aggFunction;
+    private BiFunction filterFieldFunc;
 }
