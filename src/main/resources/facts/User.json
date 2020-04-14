@@ -43,6 +43,20 @@
       "aggField": "age",
       "field":"ageSum",
       "fieldName": "成年求和",
+      "filterExpress": "name !=null && age >=22"
+    },
+    {
+      "aggFunc": "COUNT",
+      "aggField": "age",
+      "field":"ageCount",
+      "fieldName": "成年求和",
+      "filterExpress": "name !=null && age >=22"
+    },
+    {
+      "aggFunc": "AVG",
+      "aggField": "age",
+      "field":"ageAvg",
+      "fieldName": "成年求和",
       "filterExpress": "name !=null && age <=22"
     }
   ]

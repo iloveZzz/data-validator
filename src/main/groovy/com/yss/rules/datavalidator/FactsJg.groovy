@@ -8,12 +8,11 @@ import com.yss.rules.datavalidator.cache.CacheManager
 import com.yss.rules.datavalidator.cache.ObjectCache
 import com.yss.rules.datavalidator.domain.GenerateFactsService
 import com.yss.rules.datavalidator.dto.User
+import com.yss.rules.datavalidator.engine.FactEngine
 import com.yss.rules.datavalidator.model.FactModel
-import com.yss.rules.datavalidator.shell.FactsScriptEngine
 import com.yss.rules.datavalidator.util.FileUtil
 
 import java.time.LocalDateTime
-import java.util.stream.Collectors
 
 /**
  * @author daomingzhu* @date 2020/4/9 11:35
@@ -21,12 +20,7 @@ import java.util.stream.Collectors
 class FactsJg {
     static void main(String[] args) {
         ObjectCache<Script> objectCache = CacheManager.configCacheType(ObjectCache.class)
-        def sharedData = new Binding()
-        sharedData.setVariable("thant",1000)
-        def factsScriptEngine = new FactsScriptEngine(sharedData)
-
         def result = FileUtil.readFileContent("src/main/resources/facts/User.json")
-//        String result = factsScriptEngine.evaluate(warpBusDataModel(content))
 
         FactModel factModel = new Gson().fromJson(result, new TypeToken<FactModel>() {}.getType())
 
@@ -41,41 +35,10 @@ class FactsJg {
 
             uu.add(new User("dmz"+i,(15+i),LocalDateTime.now()))
         }
-
-
-
-//        def map = new FactsService().generateFactMap(bf, tt, { source, fieldModel ->
-//            Script script = objectCache.getIfNull(fieldModel.getExpression(),
-//                    { -> factsScriptEngine.parse(fieldModel.getExpression()) })
-//            source.forEach({k,v->script.setProperty(k,v)})
-//            script.setProperty("source",source)
-//            script.setProperty("fieldModel",fieldModel)
-//            script.run()
-//        })
+        FactEngine factCall = new FactEngine()
         factModel.data = uu
-        factModel.computeFunc = { source, allField ->
-                Script script = objectCache.getIfNull(allField.expression,{ -> factsScriptEngine.parse(allField.expression) })
-                source.forEach({k,v->script.setProperty(k,v)})
-                script.setProperty("source",source)
-                script.run()
-        }
-        factModel.aggFunction = { sourceList, fieldFilterAgg ->
-            //过滤数据
-            if (fieldFilterAgg.filterExpress){
-                sourceList = sourceList.stream().filter({ m ->
-                    Script script = objectCache.getIfNull(fieldFilterAgg.filterExpress,{ -> factsScriptEngine.parse(fieldFilterAgg.filterExpress) })
-                    m.forEach({k,v->script.setProperty(k,v)})
-                    script.run()
-                }).collect(Collectors.toList())
-            }
-
-            if (fieldFilterAgg.aggFunc=='SUM'){
-                sourceList.stream().map({ m -> m[fieldFilterAgg.aggField] })
-                        .map({ o -> Objects.nonNull(o) ? BigDecimal.valueOf(o.toString() as double) : BigDecimal.ZERO })
-                        .reduce(BigDecimal.ZERO,{a,v->a.add(v)})
-            }
-
-        }
+        factModel.computeFunc = factCall.computeFunc
+        factModel.aggFunction = factCall.aggFunction
         def start = System.currentTimeMillis()
         def cc = new GenerateFactsService().generateFact(factModel)
         def end = System.currentTimeMillis()

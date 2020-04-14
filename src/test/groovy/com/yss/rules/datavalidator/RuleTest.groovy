@@ -1,6 +1,6 @@
 package com.yss.rules.datavalidator
 
-import com.yss.rules.datavalidator.engine.rule.RulesEngine
+import com.yss.rules.datavalidator.engine.dsl.RulesEngine
 import org.jeasy.rules.core.DefaultRulesEngine
 
 class RuleTest extends RulesEngine{

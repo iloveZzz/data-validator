@@ -3,7 +3,6 @@ package com.yss.rules.datavalidator.cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.cache.Weigher;
 import com.yss.rules.datavalidator.cache.base.BaseCache;
 
 import java.util.Map;

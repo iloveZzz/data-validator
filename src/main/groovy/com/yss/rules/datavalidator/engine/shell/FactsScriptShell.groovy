@@ -1,4 +1,4 @@
-package com.yss.rules.datavalidator.shell
+package com.yss.rules.datavalidator.engine.shell
 
 
 import com.yss.rules.datavalidator.function.AbstractFunc
@@ -8,9 +8,10 @@ import org.codehaus.groovy.control.CompilerConfiguration
  * @author daomingzhu
  * @date 2020/4/9 16:40
  */
-class FactsScriptEngine{
+class FactsScriptShell {
     GroovyShell groovyShell
-    FactsScriptEngine(Binding binding){
+
+    FactsScriptShell(Binding binding){
         init(binding)
     }
     void init(Binding binding){

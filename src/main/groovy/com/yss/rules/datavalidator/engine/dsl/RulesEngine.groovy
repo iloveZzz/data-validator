@@ -1,4 +1,4 @@
-package com.yss.rules.datavalidator.engine.rule
+package com.yss.rules.datavalidator.engine.dsl
 
 import org.jeasy.rules.core.AbstractRulesEngine
 

@@ -1,6 +1,6 @@
-package com.yss.rules.datavalidator.engine.rule
+package com.yss.rules.datavalidator.engine.dsl
 
-import com.yss.rules.datavalidator.engine.facts.FactBuild
+
 import org.jeasy.rules.api.Facts
 import org.jeasy.rules.api.Rules
 
