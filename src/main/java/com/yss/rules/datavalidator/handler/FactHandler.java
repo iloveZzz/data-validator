@@ -1,6 +1,7 @@
 package com.yss.rules.datavalidator.handler;
 
 import com.google.common.collect.Lists;
+import com.yss.rules.datavalidator.handler.base.AbstractHandler;
 import com.yss.rules.datavalidator.model.FactCompute;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.function.BiFunction;
 /**
  * @author daomingzhu
  */
-public class FactHandler<T extends Map,R>  extends AbstractHandler<T,R>{
+public class FactHandler<T extends Map,R>  extends AbstractHandler<T,R> {
     private Map<String, FactCompute> factComputeMap;
 
     public FactHandler( Map<String, FactCompute> factComputeMap, BiFunction express) {

@@ -20,7 +20,7 @@ import java.time.LocalDateTime
 class FactsJg {
     static void main(String[] args) {
         ObjectCache<Script> objectCache = CacheManager.configCacheType(ObjectCache.class)
-        def result = FileUtil.readFileContent("src/main/resources/facts/User.json")
+        def result = FileUtil.readFileContent("src/main/resources/facts/PojoFactModel.json")
 
         FactModel factModel = new Gson().fromJson(result, new TypeToken<FactModel>() {}.getType())
 

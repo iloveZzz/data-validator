@@ -3,7 +3,7 @@ package com.yss.rules.datavalidator.domain;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.yss.rules.datavalidator.dto.FactDTO;
-import com.yss.rules.datavalidator.handler.AbstractHandler;
+import com.yss.rules.datavalidator.handler.base.AbstractHandler;
 import com.yss.rules.datavalidator.handler.FactFieldFilterAggHandler;
 import com.yss.rules.datavalidator.handler.FactFilterFieldHandler;
 import com.yss.rules.datavalidator.handler.FactHandler;

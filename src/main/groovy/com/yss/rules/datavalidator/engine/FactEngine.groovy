@@ -11,23 +11,39 @@ import java.util.stream.Collectors;
  * @date 2020/4/14 16:29
  */
 class FactEngine {
-    ObjectCache<Script> objectCache = CacheManager.configCacheType(ObjectCache.class)
-    FactsScriptShell factsScriptShell = new FactsScriptShell(new Binding())
+    static ObjectCache<Script> objectCache = CacheManager.configCacheType(ObjectCache.class)
+    static FactsScriptShell factsScriptShell = new FactsScriptShell(new Binding())
+    static void test(express,Map<String, Object> env){
+        Script script = objectCache.getIfNull(express,{ -> factsScriptShell.parse(express) })
+        env.forEach({k,v->script.setProperty(k,v)})
+        script.run()
+    }
     def filterFieldFunc = { sourceList, factFilterField ->
         //过滤数据
         if (factFilterField.filterExpress){
-            return sourceList.stream().filter({ m ->
+            if (factFilterField.type == 'List'){
+                return sourceList.stream().filter({ m ->
+                    Script script = objectCache.getIfNull(factFilterField.filterExpress,{ -> factsScriptShell.parse(factFilterField.filterExpress) })
+                    m.forEach({k,v->script.setProperty(k,v)})
+                    script.run()
+                }).collect(Collectors.toList())
+            }
+
+            Optional o = sourceList.stream().filter({ m ->
                 Script script = objectCache.getIfNull(factFilterField.filterExpress,{ -> factsScriptShell.parse(factFilterField.filterExpress) })
                 m.forEach({k,v->script.setProperty(k,v)})
                 script.run()
-            }).collect(Collectors.toList())
+            }).findAny()
+            if (o.isPresent()){
+                o.get()
+            }
         }
     }
     def computeFunc = { sourceList, allField ->
         Script script = objectCache.getIfNull(allField.expression,{ -> factsScriptShell.parse(allField.expression) })
         sourceList.forEach({k,v->script.setProperty(k,v)});
         script.setProperty("source",sourceList);
-        script.run();
+        script.run()
     }
     def aggFunction = { sourceList, fieldFilterAgg ->
         //过滤数据
@@ -58,5 +74,6 @@ class FactEngine {
                     .count();
         }
     }
+
 
 }

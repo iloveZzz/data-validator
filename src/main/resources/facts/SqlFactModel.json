@@ -1,0 +1,25 @@
+{
+  "sqlDataSet": [
+    {
+      "db": "kforcl",
+      "query": "select * from aaa",
+      "cache": 1,
+      "resultSet": "lists"
+    },
+    {
+      "db": "kforcl",
+      "query": "select * from ttt",
+      "cache": 1,
+      "resultSet": "lista"
+    }
+  ],
+  "factCompute": [],
+  "factFilterField": [
+    {
+      "type": "String",
+      "field":"accc",
+      "expression":"lists[0].a-lists[0].b=lista[22].ss"
+    }
+  ],
+  "factFieldFilterAgg": []
+}

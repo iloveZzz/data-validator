@@ -28,27 +28,36 @@
       "type": "String",
       "field":"birthdayYYYYMMDD",
       "fieldName": "生日(YYYY-MM-DD)",
-      "expression":"format('birthday','yyyy~MM~dd')"
+      "expression":"format('birthday','yyyyMMdd')"
     },
     {
       "type": "String",
       "field":"isAdult",
       "fieldName": "是否成年",
-      "expression":"if(age>17){true}else{false}"
+      "expression":"age>17?true:false"
     }
   ],
   "factFilterField": [
     {
-      "type": "String",
+      "type": "Object",
       "field":"newField",
-      "fieldName": "敖德萨多",
       "filterExpress": "name == 'dmz20'"
     },
     {
-      "type": "String",
+      "type": "List",
       "field":"acccc",
+      "filterExpress": "age == 37"
+    },
+    {
+      "type": "List",
+      "field":"acccc1",
+      "filterExpress": "age == 38"
+    },
+    {
+      "type": "List",
+      "field":"acccc2",
       "fieldName": "ssss",
-      "filterExpress": "name == 'dmz22'&& age == 38"
+      "filterExpress": "age == 39"
     }
   ],
   "factFieldFilterAgg": [

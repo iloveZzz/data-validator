@@ -1,4 +1,4 @@
-package com.yss.rules.datavalidator.handler;
+package com.yss.rules.datavalidator.handler.base;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.util.function.BiFunction;
  */
 @Data
 public abstract class AbstractHandler<T,R> {
-    AbstractHandler(BiFunction expressCall) {
+    public AbstractHandler(BiFunction expressCall) {
         this.expressCall = expressCall;
     }
     public abstract List<String> getFieldKeys();

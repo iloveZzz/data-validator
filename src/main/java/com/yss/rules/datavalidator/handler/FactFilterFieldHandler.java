@@ -2,6 +2,7 @@ package com.yss.rules.datavalidator.handler;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.yss.rules.datavalidator.handler.base.AbstractHandler;
 import com.yss.rules.datavalidator.model.FactFilterField;
 
 import java.util.Collection;

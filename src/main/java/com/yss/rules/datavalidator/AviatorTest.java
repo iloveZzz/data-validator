@@ -1,35 +1,64 @@
 package com.yss.rules.datavalidator;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
-import com.yss.rules.datavalidator.dto.User;
+import com.yss.rules.datavalidator.cache.CacheManager;
+import com.yss.rules.datavalidator.cache.ObjectCache;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AviatorTest {
+    static ObjectCache<Expression> objectCache = CacheManager.configCacheType(ObjectCache.class);
     public static void main(String[] args) {
-        String expression = "a-(b-c) > 100";
+        String expression = "a-(b-c) ";
+        String expression1 = "a+(b-c) ";
+        String expression2 = "d=a*(b-c);d+20 ";
+        String expression3 = "d=a*(b-c) ";
         Expression compiledExp = AviatorEvaluator.compile(expression);
-        List<Map<String,Object>> tt = Lists.newArrayList();
-        List<User> uu = Lists.newArrayList();
-        for (int i = 0; i < 10000; i++) {
-            Map d = Maps.newHashMap();
-            d.put("name","dmz"+i);
-            d.put("age",(15+i));
-            d.put("birthday", LocalDateTime.now());
-            tt.add(d);
+        Expression cc = AviatorEvaluator.compile("a+(b-c) ");
+        Expression dd = AviatorEvaluator.compile("a*(b-c) ");
+//        List<Map<String,Object>> tt = Lists.newArrayList();
+//        List<User> uu = Lists.newArrayList();
+//        for (int i = 0; i < 10000; i++) {
+//            Map d = Maps.newHashMap();
+//            d.put("name","dmz"+i);
+//            d.put("age",(15+i));
+//            d.put("birthday", LocalDateTime.now());
+//            tt.add(d);
+//
+//            uu.add(new User("dmz"+i,(15+i),LocalDateTime.now()));
+//        }
+//        Map<String, Object> env = new HashMap<String, Object>();
+//        env.put("uu", uu);
+//        Expression ttaa = AviatorEvaluator.compile("uu[0]['name']",true);
+//        Object execute = ttaa.execute(env);
 
-            uu.add(new User("dmz"+i,(15+i),LocalDateTime.now()));
+
+        for (int c = 0; c < 15; c++) {
+            long start = System.currentTimeMillis();
+            for (int i = 0; i < 1000000; i++) {
+                Map<String, Object> env = new HashMap<String, Object>();
+                env.put("a", 200);
+                env.put("b", 11);
+                env.put("c", 22);
+                Expression ifNull = objectCache.getIfNull(expression, () -> AviatorEvaluator.compile(expression));
+                Expression expression1s = objectCache.getIfNull(expression1, () -> AviatorEvaluator.compile(expression1));
+                Expression expression31 = objectCache.getIfNull(expression3, () -> AviatorEvaluator.compile(expression3));
+                Expression expression21 = objectCache.getIfNull(expression2, () -> AviatorEvaluator.compile(expression2));
+                ifNull.execute(env);
+                expression1s.execute(env);
+                expression21.execute(env);
+                expression31.execute(env);
+                ifNull.execute(env);
+                ifNull.execute(env);
+            }
+            long end = System.currentTimeMillis();
+            System.out.println(("执行时间："+(end-start)/100+"毫秒"));
         }
-        Map<String, Object> env = new HashMap<String, Object>();
-        env.put("uu", uu);
-        Expression ttaa = AviatorEvaluator.compile("uu[0]['name']",true);
-        Object execute = ttaa.execute(env);
-        System.out.println(11);
+
+
+
+
     }
 }
