@@ -6,14 +6,13 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.yss.rules.datavalidator.cache.CacheManager
 import com.yss.rules.datavalidator.cache.ObjectCache
-import com.yss.rules.datavalidator.domain.GenerateFactsService
 import com.yss.rules.datavalidator.dto.User
 import com.yss.rules.datavalidator.engine.FactEngine
+import com.yss.rules.datavalidator.facts.GenerateFactsContext
 import com.yss.rules.datavalidator.model.FactModel
 import com.yss.rules.datavalidator.util.FileUtil
 
 import java.time.LocalDateTime
-
 /**
  * @author daomingzhu* @date 2020/4/9 11:35
  */
@@ -41,7 +40,7 @@ class FactsJg {
         factModel.computeFunc = factCall.computeFunc
         factModel.aggFunction = factCall.aggFunction
         def start = System.currentTimeMillis()
-        def cc = new GenerateFactsService().generateFact(factModel)
+        def cc = new GenerateFactsContext(factModel).generateFact()
         println cc.filterField
         println cc.fieldFilterAgg
         def end = System.currentTimeMillis()

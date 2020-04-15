@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import java.util.Map;
 
 /**
+ * 缓存管理器-缓存策略
  * @author daomingzhu
  * @date 2020/4/10 12:59
  */

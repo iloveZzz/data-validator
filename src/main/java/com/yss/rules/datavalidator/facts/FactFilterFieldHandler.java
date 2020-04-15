@@ -1,16 +1,15 @@
-package com.yss.rules.datavalidator.handler;
+package com.yss.rules.datavalidator.facts;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.yss.rules.datavalidator.handler.base.AbstractHandler;
+import com.yss.rules.datavalidator.facts.base.AbstractHandler;
 import com.yss.rules.datavalidator.model.FactFilterField;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-public class FactFilterFieldHandler<T extends Collection<Map<String,Object>>,R>  extends AbstractHandler<T,R> {
+public class FactFilterFieldHandler  extends AbstractHandler {
     private Map<String, FactFilterField> factFilterFieldMap;
     public FactFilterFieldHandler(Map<String, FactFilterField> factFilterFieldMap, BiFunction express) {
         super(express);
@@ -22,11 +21,12 @@ public class FactFilterFieldHandler<T extends Collection<Map<String,Object>>,R> 
     }
 
     @Override
-    public R doHandler(T sourceList) {
+    public <R, P> R doHandler(P p) {
         Map<String,Object> rt = Maps.newHashMap();
         factFilterFieldMap.forEach((k,factFilterField)->{
-            rt.put(k,getExpressCall().apply(sourceList,factFilterField));
+            rt.put(k,getExpressCall().apply(p,factFilterField));
         });
         return (R) rt;
     }
+
 }
