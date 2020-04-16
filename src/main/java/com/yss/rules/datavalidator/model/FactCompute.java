@@ -12,4 +12,12 @@ public class FactCompute extends FactField {
     public FactCompute(String field, String fieldName, String type, Object defaultVal) {
         super(field, fieldName, type, defaultVal);
     }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
 }

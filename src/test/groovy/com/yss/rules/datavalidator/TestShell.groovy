@@ -1,6 +1,6 @@
 package com.yss.rules.datavalidator
 
-import com.yss.rules.datavalidator.engine.dsl.RulesEngine
+import com.yss.rules.datavalidator.dsl.RulesEngine
 import org.codehaus.groovy.control.CompilerConfiguration
 
 /**

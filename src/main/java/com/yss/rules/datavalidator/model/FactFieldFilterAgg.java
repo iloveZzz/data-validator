@@ -32,11 +32,11 @@ public class FactFieldFilterAgg  extends FactField{
         this.aggField = aggField;
     }
 
-    public String getFilter() {
+    public String getFilterExpress() {
         return filterExpress;
     }
 
-    public void setFilter(String filter) {
-        this.filterExpress = filter;
+    public void setFilterExpress(String filterExpress) {
+        this.filterExpress = filterExpress;
     }
 }

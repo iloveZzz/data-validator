@@ -2,14 +2,12 @@ package com.yss.rules.datavalidator;
 
 import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
-import com.yss.rules.datavalidator.cache.CacheManager;
 import com.yss.rules.datavalidator.cache.ObjectCache;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class AviatorTest {
-    static ObjectCache<Expression> objectCache = CacheManager.configCacheType(ObjectCache.class);
     public static void main(String[] args) {
         String expression = "a-(b-c) ";
         String expression1 = "a+(b-c) ";
@@ -42,10 +40,10 @@ public class AviatorTest {
                 env.put("a", 200);
                 env.put("b", 11);
                 env.put("c", 22);
-                Expression ifNull = objectCache.getIfNull(expression, () -> AviatorEvaluator.compile(expression));
-                Expression expression1s = objectCache.getIfNull(expression1, () -> AviatorEvaluator.compile(expression1));
-                Expression expression31 = objectCache.getIfNull(expression3, () -> AviatorEvaluator.compile(expression3));
-                Expression expression21 = objectCache.getIfNull(expression2, () -> AviatorEvaluator.compile(expression2));
+                Expression ifNull = ObjectCache.getIfNull(expression, () -> AviatorEvaluator.compile(expression));
+                Expression expression1s = ObjectCache.getIfNull(expression1, () -> AviatorEvaluator.compile(expression1));
+                Expression expression31 = ObjectCache.getIfNull(expression3, () -> AviatorEvaluator.compile(expression3));
+                Expression expression21 = ObjectCache.getIfNull(expression2, () -> AviatorEvaluator.compile(expression2));
                 ifNull.execute(env);
                 expression1s.execute(env);
                 expression21.execute(env);

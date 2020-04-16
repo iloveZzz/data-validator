@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
  * @author daomingzhu
  * @date 2020/4/9 17:46
  */
-public class GenerateFactsContext {
+public class FactsGenerator {
     private FactModel factModel;
     private List<Map<String,Object>> sourceData;
     private ConcurrentLinkedQueue<AbstractHandler> handlerExecuteQueue = Queues.newConcurrentLinkedQueue();
-    public GenerateFactsContext(FactModel factModel){
+    public FactsGenerator(FactModel factModel){
         //事实接入的字段
         this.sourceData = getSourceDataMap(
                 factModel.getData(),
@@ -38,7 +38,7 @@ public class GenerateFactsContext {
      * 生成事实业务数据对象
      * @return FactDTO
      */
-    public void init(){
+    private void init(){
         //需要预处理和计算的字段
         handlerExecuteQueue.add(new FactHandler(
                 factModel.getFactCompute().stream().collect(Collectors.toMap(FactCompute::getField, v -> v, (o, n) -> n, HashMap::new)),

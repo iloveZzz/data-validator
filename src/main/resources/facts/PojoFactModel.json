@@ -44,17 +44,17 @@
       "filterExpress": "name == 'dmz20'"
     },
     {
-      "type": "List",
+      "type": "Object",
       "field":"acccc",
       "filterExpress": "age == 37"
     },
     {
-      "type": "List",
+      "type": "Object",
       "field":"acccc1",
       "filterExpress": "age == 38"
     },
     {
-      "type": "List",
+      "type": "Object",
       "field":"acccc2",
       "fieldName": "ssss",
       "filterExpress": "age == 39"
