@@ -1,4 +1,4 @@
-package com.yss.rules.datavalidator.facts;
+package com.yss.rules.datavalidator.facts.handler;
 
 import com.google.common.collect.Lists;
 import com.yss.rules.datavalidator.facts.base.AbstractHandler;

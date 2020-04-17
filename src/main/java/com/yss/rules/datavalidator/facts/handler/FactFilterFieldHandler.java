@@ -1,4 +1,4 @@
-package com.yss.rules.datavalidator.facts;
+package com.yss.rules.datavalidator.facts.handler;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+/**
+ * @author daomingzhu
+ */
 public class FactFilterFieldHandler  extends AbstractHandler {
     private Map<String, FactFilterField> factFilterFieldMap;
     public FactFilterFieldHandler(Map<String, FactFilterField> factFilterFieldMap, BiFunction express) {

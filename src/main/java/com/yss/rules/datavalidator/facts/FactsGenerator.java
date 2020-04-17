@@ -5,6 +5,9 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
 import com.yss.rules.datavalidator.dto.FactDTO;
 import com.yss.rules.datavalidator.facts.base.AbstractHandler;
+import com.yss.rules.datavalidator.facts.handler.FactFieldFilterAggHandler;
+import com.yss.rules.datavalidator.facts.handler.FactFilterFieldHandler;
+import com.yss.rules.datavalidator.facts.handler.FactHandler;
 import com.yss.rules.datavalidator.model.FactCompute;
 import com.yss.rules.datavalidator.model.FactFieldFilterAgg;
 import com.yss.rules.datavalidator.model.FactFilterField;
@@ -60,10 +63,11 @@ public class FactsGenerator {
         final AbstractHandler factHandler = handlerExecuteQueue.poll();
         List<Map<String, Object>> rt = sourceData.stream().map(s-> factHandler.<Map<String, Object>, Map<String, Object>>doHandler(s)).collect(Collectors.toList());
         //事实字段过滤句柄
-        Object filterField = handlerExecuteQueue.poll().doHandler(rt);
+        AbstractHandler filterHandler = handlerExecuteQueue.poll();
+        Object filterField = Objects.requireNonNull(filterHandler).doHandler(rt);
         //事实字段聚合句柄
-        Object var = handlerExecuteQueue.poll().doHandler(rt);
-
+        AbstractHandler aggHandler = handlerExecuteQueue.poll();
+        Object var = Objects.requireNonNull(aggHandler).doHandler(rt);
         return new FactDTO(rt,filterField,var);
     }
 
