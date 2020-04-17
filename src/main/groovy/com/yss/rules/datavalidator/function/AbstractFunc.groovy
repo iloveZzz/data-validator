@@ -9,14 +9,14 @@ import java.time.format.DateTimeFormatter;
  * @date 2020/4/9 16:31
  */
 abstract class AbstractFunc extends Script {
-    Object format(String fieldKey,String pattern){
+    def format(String fieldKey,String pattern){
         Map<String,Object> source = this.getProperty("source")
         if (source!=null&&source[fieldKey]!=null){
             return source[fieldKey].format(DateTimeFormatter.ofPattern(pattern))
         }
         ''
     }
-    Boolean assertFilter(){
+    def assertFilter(){
 
     }
 }

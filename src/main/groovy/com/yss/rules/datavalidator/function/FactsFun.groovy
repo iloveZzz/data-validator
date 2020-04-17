@@ -3,7 +3,7 @@ package com.yss.rules.datavalidator.function;
 import com.yss.rules.datavalidator.cache.ObjectCache
 import com.yss.rules.datavalidator.engine.shell.FactsScriptShell
 
-import java.util.stream.Collectors;
+import java.util.stream.Collectors
 
 /**
  * @author daomingzhu
