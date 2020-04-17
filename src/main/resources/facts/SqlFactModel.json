@@ -1,14 +1,21 @@
 {
   "sqlDataSet": [
     {
-      "db": "kforcl",
-      "query": "select * from aaa",
+      "db": "local",
+      "param": {
+        "id2": "报表通用列3"
+      },
+      "query": "select t.* from TP_REP_BASIC_PARAM t where param_name = :id2",
       "cache": 1,
       "resultSet": "lists"
     },
     {
-      "db": "kforcl",
-      "query": "select * from ttt",
+      "db": "local",
+      "param": {
+        "id1": "报表通用列2",
+        "id2": "报表通用列3"
+      },
+      "query": "select t.* from TP_REP_BASIC_PARAM t where param_name in (:id1,:id2)",
       "cache": 1,
       "resultSet": "lista"
     }
