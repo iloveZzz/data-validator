@@ -16,11 +16,8 @@ public class Test {
         Map m = Maps.newHashMap();
         m.put("id1", "报表通用列");
         m.put("id2", "报表通用列3");
-        List<Map> report_220 = (List<Map>) SqlExecutor.query("report_220", "select t.* from TP_REP_BASIC_PARAM t where param_name in (:id1,:id2)",m);
-        System.out.println(report_220);
-        report_220.forEach(ms-> System.out.println(ms.get("PARAM_NAME")));
-//        List<Map> localSofa = (List<Map>) SqlExecuter.query("local_SOFA", "select t.* from T_R_REPORT t ");
-//        System.out.println(localSofa);
+        List<Map> localSofa = (List<Map>) SqlExecutor.query("local_SOFA", "select t.* from T_R_REPORT t ");
+        System.out.println(localSofa);
         long end = System.currentTimeMillis();
         System.out.println(("执行时间："+(end-start)/100+"毫秒"));
 //        ObjectCache<Integer> objectCache = CacheManager.configCacheType(ObjectCache.class);

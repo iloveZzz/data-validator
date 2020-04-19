@@ -1,8 +1,11 @@
 package com.yss.rules.datavalidator.function;
 
 import com.yss.rules.datavalidator.cache.ObjectCache
+import com.yss.rules.datavalidator.db.SqlExecutor
 import com.yss.rules.datavalidator.engine.shell.FactsScriptShell
+import com.yss.rules.datavalidator.model.FactSqlDataSet
 
+import java.util.function.BiFunction
 import java.util.stream.Collectors
 
 /**
@@ -10,8 +13,17 @@ import java.util.stream.Collectors
  * @date 2020/4/14 16:29
  */
 class FactsFun {
-    static FactsScriptShell factsScriptShell = new FactsScriptShell(new Binding())
-    static filterFieldFunc = { sourceList, factFilterField ->
+    FactsScriptShell factsScriptShell = new FactsScriptShell(new Binding())
+    BiFunction sqlFunc = { Map<String,Object> bindVar, FactSqlDataSet field ->
+        field.param?SqlExecutor.query(field.db, field.sqlExpress,field.param):SqlExecutor.query(field.db, field.sqlExpress)
+    }
+    BiFunction computeFunc = { sourceList, allField ->
+        Script script = ObjectCache.getIfNull(allField.expression,{ -> factsScriptShell.parse(allField.expression) })
+        sourceList.forEach({k,v->script.setProperty(k,v)});
+        script.setProperty("source",sourceList);
+        script.run()
+    }
+    BiFunction filterFieldFunc = { sourceList, factFilterField ->
         //过滤数据
         if (factFilterField.filterExpress){
             if (factFilterField.type == 'List'){
@@ -32,13 +44,7 @@ class FactsFun {
             }
         }
     }
-    static computeFunc = { sourceList, allField ->
-        Script script = ObjectCache.getIfNull(allField.expression,{ -> factsScriptShell.parse(allField.expression) })
-        sourceList.forEach({k,v->script.setProperty(k,v)});
-        script.setProperty("source",sourceList);
-        script.run()
-    }
-    static aggFunction = { sourceList, fieldFilterAgg ->
+    BiFunction aggFunction = { sourceList, fieldFilterAgg ->
         //过滤数据
         if (fieldFilterAgg.filterExpress){
             sourceList = sourceList.stream().filter({ m ->

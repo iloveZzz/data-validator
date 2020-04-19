@@ -25,7 +25,10 @@ public class FactHandler  extends AbstractHandler {
 
     @Override
     public <R, P> R doHandler(P sourceMap) {
-        factComputeMap.forEach((k,v)-> ((Map)sourceMap).put(k,getExpressCall().apply(sourceMap,v)));
+        List<Map<String,Object>> sourceData = ((List<Map<String,Object>>)sourceMap);
+        sourceData.forEach(sm->
+                        factComputeMap.forEach((k,v)-> sm.put(k,getExpressCall().apply(sm,v)))
+                );
         return (R) sourceMap;
     }
 }

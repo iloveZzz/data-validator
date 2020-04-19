@@ -2,21 +2,15 @@ package com.yss.rules.datavalidator.facts;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Queues;
-import com.yss.rules.datavalidator.dto.FactDTO;
-import com.yss.rules.datavalidator.facts.base.AbstractHandler;
 import com.yss.rules.datavalidator.facts.handler.FactFieldFilterAggHandler;
 import com.yss.rules.datavalidator.facts.handler.FactFilterFieldHandler;
 import com.yss.rules.datavalidator.facts.handler.FactHandler;
-import com.yss.rules.datavalidator.model.FactCompute;
-import com.yss.rules.datavalidator.model.FactFieldFilterAgg;
-import com.yss.rules.datavalidator.model.FactFilterField;
-import com.yss.rules.datavalidator.model.FactModel;
+import com.yss.rules.datavalidator.facts.handler.FactSqlDataSetHandler;
+import com.yss.rules.datavalidator.model.*;
 import com.yss.rules.datavalidator.model.base.FactField;
 import org.springframework.cglib.beans.BeanMap;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 /**
@@ -25,50 +19,41 @@ import java.util.stream.Collectors;
  * @date 2020/4/9 17:46
  */
 public class FactsGenerator {
-    private FactModel factModel;
-    private List<Map<String,Object>> sourceData;
-    private ConcurrentLinkedQueue<AbstractHandler> handlerExecuteQueue = Queues.newConcurrentLinkedQueue();
-    public FactsGenerator(FactModel factModel){
+    private final FactsContext factsContext = new FactsContext();;
+    public FactsGenerator(final FactModel factModel){
         //事实接入的字段
-        this.sourceData = getSourceDataMap(
-                factModel.getData(),
-                factModel.getFactField().stream().collect(Collectors.toMap(FactField::getField,v->v, (o, n) -> n, HashMap::new)));
-        this.factModel = factModel;
-        //执行初始化上下文
-        init();
-    }
-    /**
-     * 生成事实业务数据对象
-     * @return FactDTO
-     */
-    private void init(){
-        //需要预处理和计算的字段
-        handlerExecuteQueue.add(new FactHandler(
-                factModel.getFactCompute().stream().collect(Collectors.toMap(FactCompute::getField, v -> v, (o, n) -> n, HashMap::new)),
-                factModel.getComputeFunc()));
-        handlerExecuteQueue.add(new FactFieldFilterAggHandler(
-                factModel.getFactFieldFilterAgg().stream().collect(Collectors.toMap(FactFieldFilterAgg::getField, v -> v, (o, n) -> n, HashMap::new)),
-                factModel.getAggFunction()));
-        handlerExecuteQueue.add(new FactFilterFieldHandler(
-                factModel.getFactFilterField().stream().collect(Collectors.toMap(FactFilterField::getField, v -> v, (o, n) -> n, HashMap::new)),
-                factModel.getFilterFieldFunc()));
+        Map<String, FactField> factFieldMap = factModel.getFactField().stream().collect(Collectors.toMap(FactField::getField, v -> v, (o, n) -> n, HashMap::new));
+        Map<String,Object> rstMsg = Maps.newHashMap();
+        factsContext
+                .sourceData(getSourceDataMap(factModel.getData(),factFieldMap))
+                .rstMsg(rstMsg)
+                .initHandler(factsContext->{
+                    //需要预处理和计算的字段
+                    factsContext.insertHandler(new FactSqlDataSetHandler(
+                            factModel.getFactSqlDataSets().stream().collect(Collectors.toMap(FactSqlDataSet::getField, v -> v, (o, n) -> n, HashMap::new)),
+                            factModel.getFactsFun().getSqlFunc()));
+
+                    factsContext.insertHandler(new FactHandler(
+                            factModel.getFactCompute().stream().collect(Collectors.toMap(FactCompute::getField, v -> v, (o, n) -> n, HashMap::new)),
+                            factModel.getFactsFun().getComputeFunc()));
+
+                    factsContext.insertHandler(new FactFilterFieldHandler(
+                            factModel.getFactFilterField().stream().collect(Collectors.toMap(FactFilterField::getField, v -> v, (o, n) -> n, HashMap::new)),
+                            factModel.getFactsFun().getFilterFieldFunc()));
+
+                    factsContext.insertHandler(new FactFieldFilterAggHandler(
+                            factModel.getFactFieldFilterAgg().stream().collect(Collectors.toMap(FactFieldFilterAgg::getField, v -> v, (o, n) -> n, HashMap::new)),
+                            factModel.getFactsFun().getAggFunction()));
+                });
+
     }
 
     /**
      * 执行字段数据处理的句柄
      * @return FactDTO
      */
-    public FactDTO generateFact(){
-        //事实字段预处理句柄
-        final AbstractHandler factHandler = handlerExecuteQueue.poll();
-        List<Map<String, Object>> rt = sourceData.stream().map(s-> factHandler.<Map<String, Object>, Map<String, Object>>doHandler(s)).collect(Collectors.toList());
-        //事实字段过滤句柄
-        AbstractHandler filterHandler = handlerExecuteQueue.poll();
-        Object filterField = Objects.requireNonNull(filterHandler).doHandler(rt);
-        //事实字段聚合句柄
-        AbstractHandler aggHandler = handlerExecuteQueue.poll();
-        Object var = Objects.requireNonNull(aggHandler).doHandler(rt);
-        return new FactDTO(rt,filterField,var);
+    public Map<String,Object> generateFact(Map<String,Object> bindVar){
+        return factsContext.execute(bindVar);
     }
 
     /**

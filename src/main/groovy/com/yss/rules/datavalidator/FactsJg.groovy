@@ -16,6 +16,7 @@ import java.time.LocalDateTime
  */
 class FactsJg {
     static void main(String[] args) {
+        Map bindVar = Maps.newHashMap();
         def result = FileUtil.readFileContent("src/main/resources/facts/PojoFactModel.json")
 
         FactModel factModel = new Gson().fromJson(result, new TypeToken<FactModel>() {}.getType())
@@ -32,17 +33,16 @@ class FactsJg {
             uu.add(new User("dmz"+i,(15+i),LocalDateTime.now()))
         }
         factModel.data = uu
-        factModel.filterFieldFunc = FactsFun.filterFieldFunc
-        factModel.computeFunc = FactsFun.computeFunc
-        factModel.aggFunction = FactsFun.aggFunction
-        for (int i = 0; i <1; i++) {
+        factModel.factsFun = new FactsFun()
+        for (int i = 0; i <4; i++) {
             def generater = new FactsGenerator(factModel)
             def start = System.currentTimeMillis()
-            def cc = generater.generateFact()
+            def cc = generater.generateFact(bindVar)
             def end = System.currentTimeMillis()
             println('执行时间：'+(end-start)/1000+'秒')
+            println cc.sqlData
             println cc.filterField
-            println cc.fieldFilterAgg
+            println cc.aggData
         }
 
 //        println(bf.年龄.defaultVal)
