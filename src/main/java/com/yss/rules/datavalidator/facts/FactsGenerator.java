@@ -26,24 +26,24 @@ public class FactsGenerator {
         final List<Map<String, Object>> sourceDataMap = getSourceDataMap(factModel.getData(), factFieldMap);
         factsContext
                 .option()
-                .initHandler(factsContext->{
+                .initHandler(handlers->{
                     //需要预处理和计算的字段
-                    factsContext.insertHandler(new FactSqlDataSetHandler(
+                    handlers.add(new FactSqlDataSetHandler(
                             factModel.getFactSqlDataSets().stream().collect(Collectors.toMap(FactSqlDataSet::getField, v -> v, (o, n) -> n, HashMap::new)),
                             Maps.newHashMap(),
                             factModel.getFactsFun().getSqlFunc()));
 
-                    factsContext.insertHandler(new FactHandler(
+                    handlers.add(new FactHandler(
                             factModel.getFactCompute().stream().collect(Collectors.toMap(FactCompute::getField, v -> v, (o, n) -> n, HashMap::new)),
                             sourceDataMap,
                             factModel.getFactsFun().getComputeFunc()));
 
-                    factsContext.insertHandler(new FactFilterFieldHandler(
+                    handlers.add(new FactFilterFieldHandler(
                             factModel.getFactFilterField().stream().collect(Collectors.toMap(FactFilterField::getField, v -> v, (o, n) -> n, HashMap::new)),
                             sourceDataMap,
                             factModel.getFactsFun().getFilterFieldFunc()));
 
-                    factsContext.insertHandler(new FactFieldFilterAggHandler(
+                    handlers.add(new FactFieldFilterAggHandler(
                             factModel.getFactFieldFilterAgg().stream().collect(Collectors.toMap(FactFieldFilterAgg::getField, v -> v, (o, n) -> n, HashMap::new)),
                             sourceDataMap,
                             factModel.getFactsFun().getAggFunction()));
@@ -55,7 +55,7 @@ public class FactsGenerator {
      * 执行字段数据处理的句柄
      * @return FactDTO
      */
-    public Map<Object, Object> generateFact(){
+    public Map<String, Object> generateFact(){
         factsContext.execute();
         return factsContext.result();
     }

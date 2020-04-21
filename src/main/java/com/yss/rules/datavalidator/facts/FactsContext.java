@@ -14,23 +14,20 @@ public class FactsContext {
     public FactsContext _self(){
         return this;
     }
-    public void insertHandler(AbstractHandler handler){
-        handlers.add(handler);
-    }
 
     public FactsContext option(){
         return _self();
     }
-    public void initHandler(Consumer<FactsContext> function){
-        function.accept(this);
+    public void initHandler(Consumer<List<AbstractHandler>> function){
+        function.accept(handlers);
     }
 
     public void execute() {
         handlers.forEach(AbstractHandler::doHandler);
     }
 
-    public Map<Object, Object> result() {
-        Map<Object, Object> rts = Maps.newHashMap();
+    public Map<String, Object> result() {
+        Map<String, Object> rts = Maps.newHashMap();
         handlers.forEach(abstractHandler -> rts.put(abstractHandler.getHandlerName(),abstractHandler.result));
         return rts;
     }

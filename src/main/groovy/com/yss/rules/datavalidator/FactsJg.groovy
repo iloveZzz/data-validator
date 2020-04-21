@@ -23,7 +23,7 @@ class FactsJg {
 
         List<Map<String,Object>> tt = Lists.newArrayList()
         List<User> uu = Lists.newArrayList()
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             def d = Maps.newHashMap();
             d.put("name","dmz"+i)
             d.put("age",(15+i))
@@ -34,7 +34,7 @@ class FactsJg {
         }
         factModel.data = uu
         factModel.factsFun = new FactsFun()
-        for (int i = 0; i <4; i++) {
+        for (int i = 0; i <1; i++) {
             def generater = new FactsGenerator(factModel)
             def start = System.currentTimeMillis()
             def cc = generater.generateFact()

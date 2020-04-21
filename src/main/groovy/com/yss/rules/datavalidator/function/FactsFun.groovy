@@ -1,4 +1,4 @@
-package com.yss.rules.datavalidator.function;
+package com.yss.rules.datavalidator.function
 
 import com.yss.rules.datavalidator.cache.ObjectCache
 import com.yss.rules.datavalidator.db.SqlExecutor
@@ -7,21 +7,24 @@ import com.yss.rules.datavalidator.model.FactSqlDataSet
 
 import java.util.function.BiFunction
 import java.util.stream.Collectors
-
 /**
  * @author daomingzhu
  * @date 2020/4/14 16:29
  */
 class FactsFun {
-    FactsScriptShell factsScriptShell = new FactsScriptShell(new Binding())
+    Binding binding = new Binding()
+    FactsScriptShell factsScriptShell = new FactsScriptShell(binding)
     BiFunction sqlFunc = { Map<String,Object> bindVar, FactSqlDataSet field ->
-        field.param?SqlExecutor.query(field.db, field.sqlExpress,field.param):SqlExecutor.query(field.db, field.sqlExpress)
+        def sqlDataSet = field.param? SqlExecutor.query(field.db, field.sqlExpress,field.param):SqlExecutor.query(field.db, field.sqlExpress)
+        binding.setVariable("sqlDataSet",sqlDataSet)
+        sqlDataSet
     }
     BiFunction computeFunc = { sourceList, allField ->
         Script script = ObjectCache.getIfNull(allField.expression,{ -> factsScriptShell.parse(allField.expression) })
         sourceList.forEach({k,v->script.setProperty(k,v)});
         script.setProperty("source",sourceList);
-        script.run()
+        def computeField = script.run()
+        computeField
     }
     BiFunction filterFieldFunc = { sourceList, factFilterField ->
         //过滤数据
@@ -40,7 +43,8 @@ class FactsFun {
                 script.run()
             }).findAny()
             if (o.isPresent()){
-                o.get()
+                def filterField = o.get()
+                filterField
             }
         }
     }

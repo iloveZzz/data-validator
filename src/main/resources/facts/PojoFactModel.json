@@ -10,6 +10,17 @@
       "type": "List",
       "field":"tests",
       "fieldName": "测试数据集"
+    },
+    {
+      "db": "local",
+      "param": {
+        "id2": "报表通用列3"
+      },
+      "sqlExpress": "select t.* from TP_REP_BASIC_PARAM t where param_name = :id2",
+      "cache": 1,
+      "type": "List",
+      "field":"tests11",
+      "fieldName": "测试数据集1"
     }
   ],
   "factField": [
