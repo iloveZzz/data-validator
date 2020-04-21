@@ -24,25 +24,29 @@ public class FactsGenerator {
         //事实接入的字段
         Map<String, FactField> factFieldMap = factModel.getFactField().stream().collect(Collectors.toMap(FactField::getField, v -> v, (o, n) -> n, HashMap::new));
         Map<String,Object> rstMsg = Maps.newHashMap();
+        final List<Map<String, Object>> sourceDataMap = getSourceDataMap(factModel.getData(), factFieldMap);
         factsContext
-                .sourceData(getSourceDataMap(factModel.getData(),factFieldMap))
                 .rstMsg(rstMsg)
                 .initHandler(factsContext->{
                     //需要预处理和计算的字段
                     factsContext.insertHandler(new FactSqlDataSetHandler(
                             factModel.getFactSqlDataSets().stream().collect(Collectors.toMap(FactSqlDataSet::getField, v -> v, (o, n) -> n, HashMap::new)),
+                            Maps.newHashMap(),
                             factModel.getFactsFun().getSqlFunc()));
 
                     factsContext.insertHandler(new FactHandler(
                             factModel.getFactCompute().stream().collect(Collectors.toMap(FactCompute::getField, v -> v, (o, n) -> n, HashMap::new)),
+                            sourceDataMap,
                             factModel.getFactsFun().getComputeFunc()));
 
                     factsContext.insertHandler(new FactFilterFieldHandler(
                             factModel.getFactFilterField().stream().collect(Collectors.toMap(FactFilterField::getField, v -> v, (o, n) -> n, HashMap::new)),
+                            sourceDataMap,
                             factModel.getFactsFun().getFilterFieldFunc()));
 
                     factsContext.insertHandler(new FactFieldFilterAggHandler(
                             factModel.getFactFieldFilterAgg().stream().collect(Collectors.toMap(FactFieldFilterAgg::getField, v -> v, (o, n) -> n, HashMap::new)),
+                            sourceDataMap,
                             factModel.getFactsFun().getAggFunction()));
                 });
 
@@ -52,8 +56,9 @@ public class FactsGenerator {
      * 执行字段数据处理的句柄
      * @return FactDTO
      */
-    public Map<String,Object> generateFact(Map<String,Object> bindVar){
-        return factsContext.execute(bindVar);
+    public List<Object> generateFact(){
+        factsContext.execute();
+        return factsContext.getResult();
     }
 
     /**

@@ -23,7 +23,7 @@ class FactsJg {
 
         List<Map<String,Object>> tt = Lists.newArrayList()
         List<User> uu = Lists.newArrayList()
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 100; i++) {
             def d = Maps.newHashMap();
             d.put("name","dmz"+i)
             d.put("age",(15+i))
@@ -37,12 +37,10 @@ class FactsJg {
         for (int i = 0; i <4; i++) {
             def generater = new FactsGenerator(factModel)
             def start = System.currentTimeMillis()
-            def cc = generater.generateFact(bindVar)
+            def cc = generater.generateFact()
             def end = System.currentTimeMillis()
             println('执行时间：'+(end-start)/1000+'秒')
-            println cc.sqlData
-            println cc.filterField
-            println cc.aggData
+            println cc
         }
 
 //        println(bf.年龄.defaultVal)

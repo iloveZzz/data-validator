@@ -10,11 +10,12 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 public class FactSqlDataSetHandler extends AbstractHandler {
-    private Map<String, FactSqlDataSet> factSqlDataSetMap;
-
-    public FactSqlDataSetHandler(Map<String, FactSqlDataSet> factSqlDataSetMap,BiFunction expressCall) {
-        super(expressCall);
+    private final Map<String, FactSqlDataSet> factSqlDataSetMap;
+    private final Map<String,Object> handlerParam;
+    public FactSqlDataSetHandler(Map<String, FactSqlDataSet> factSqlDataSetMap,Map<String,Object> handlerParam,BiFunction expressCall) {
+        super("sqlDataSet",expressCall);
         this.factSqlDataSetMap = factSqlDataSetMap;
+        this.handlerParam = handlerParam;
     }
 
     @Override
@@ -23,11 +24,9 @@ public class FactSqlDataSetHandler extends AbstractHandler {
     }
 
     @Override
-    public <R, P> R doHandler(P p) {
-        final Map<String,Object> bindVar = (Map<String,Object>)p;
-
+    public  void doHandler() {
         Map<String,Object> rt = Maps.newHashMap();
-        factSqlDataSetMap.forEach((k,v)-> rt.put(k,getExpressCall().apply(bindVar,v)));
-        return (R) rt;
+        factSqlDataSetMap.forEach((k,v)-> rt.put(k,getExpressCall().apply(handlerParam,v)));
+        super.result = rt;
     }
 }

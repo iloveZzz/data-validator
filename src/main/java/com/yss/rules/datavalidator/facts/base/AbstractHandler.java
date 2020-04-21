@@ -11,12 +11,14 @@ import java.util.function.BiFunction;
  */
 @Data
 public abstract class AbstractHandler {
-    public AbstractHandler(BiFunction expressCall) {
+    public AbstractHandler(String handlerName,BiFunction expressCall) {
+        this.handlerName = handlerName;
         this.expressCall = expressCall;
     }
     public abstract List<String> getFieldKeys();
-    public abstract <R,P> R doHandler(P p);
+    public abstract void doHandler();
+    private String handlerName;
     private BiFunction expressCall;
-    private Object result;
+    public Object result;
 
 }

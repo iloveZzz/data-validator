@@ -14,9 +14,11 @@ import java.util.function.BiFunction;
  */
 public class FactFilterFieldHandler  extends AbstractHandler {
     private Map<String, FactFilterField> factFilterFieldMap;
-    public FactFilterFieldHandler(Map<String, FactFilterField> factFilterFieldMap, BiFunction express) {
-        super(express);
+    private final List<Map<String, Object>> handlerParam;
+    public FactFilterFieldHandler(Map<String, FactFilterField> factFilterFieldMap,List<Map<String, Object>> handlerParam, BiFunction express) {
+        super("filterField",express);
         this.factFilterFieldMap = factFilterFieldMap;
+        this.handlerParam = handlerParam;
     }
     @Override
     public List<String> getFieldKeys() {
@@ -24,12 +26,12 @@ public class FactFilterFieldHandler  extends AbstractHandler {
     }
 
     @Override
-    public <R, P> R doHandler(P p) {
+    public void doHandler() {
         Map<String,Object> rt = Maps.newHashMap();
         factFilterFieldMap.forEach((k,factFilterField)->{
-            rt.put(k,getExpressCall().apply(p,factFilterField));
+            rt.put(k,getExpressCall().apply(handlerParam,factFilterField));
         });
-        return (R) rt;
+        super.result = rt;
     }
 
 }

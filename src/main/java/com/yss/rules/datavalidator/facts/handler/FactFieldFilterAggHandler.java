@@ -10,13 +10,15 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 /**
- * @author daomingzhu
+ * @author daomingzhu  sourceDataLs
  */
 public class FactFieldFilterAggHandler  extends AbstractHandler {
-    private Map<String, FactFieldFilterAgg> factFieldFilterAgg;
-    public FactFieldFilterAggHandler(Map<String, FactFieldFilterAgg> factFieldFilterAgg, BiFunction express) {
-        super(express);
+    private final Map<String, FactFieldFilterAgg> factFieldFilterAgg;
+    private final List<Map<String, Object>> handlerParam;
+    public FactFieldFilterAggHandler(Map<String, FactFieldFilterAgg> factFieldFilterAgg,List<Map<String, Object>> handlerParam,BiFunction express) {
+        super("fieldFilterAgg",express);
         this.factFieldFilterAgg = factFieldFilterAgg;
+        this.handlerParam = handlerParam;
     }
 
     @Override
@@ -25,11 +27,11 @@ public class FactFieldFilterAggHandler  extends AbstractHandler {
     }
 
     @Override
-    public <R, P> R doHandler(P listMap) {
+    public void doHandler() {
         Map<String,Object> rt = Maps.newHashMap();
         factFieldFilterAgg.forEach((k,v)->{
-            rt.put(k,getExpressCall().apply(listMap,v));
+            rt.put(k,getExpressCall().apply(handlerParam,v));
         });
-        return (R)rt;
+        super.result = rt;
     }
 }

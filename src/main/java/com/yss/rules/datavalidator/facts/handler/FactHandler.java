@@ -13,10 +13,12 @@ import java.util.function.BiFunction;
  */
 public class FactHandler  extends AbstractHandler {
     private Map<String, FactCompute> factComputeMap;
+    private List<Map<String,Object>> param;
 
-    public FactHandler( Map<String, FactCompute> factComputeMap, BiFunction express) {
-        super(express);
+    public FactHandler( Map<String, FactCompute> factComputeMap,List<Map<String,Object>> param, BiFunction express) {
+        super("factField",express);
         this.factComputeMap = factComputeMap;
+        this.param = param;
     }
     @Override
     public List<String> getFieldKeys(){
@@ -24,11 +26,10 @@ public class FactHandler  extends AbstractHandler {
     }
 
     @Override
-    public <R, P> R doHandler(P sourceMap) {
-        List<Map<String,Object>> sourceData = ((List<Map<String,Object>>)sourceMap);
-        sourceData.forEach(sm->
+    public  void doHandler() {
+        param.forEach(sm->
                         factComputeMap.forEach((k,v)-> sm.put(k,getExpressCall().apply(sm,v)))
                 );
-        return (R) sourceMap;
+        super.result = param;
     }
 }
