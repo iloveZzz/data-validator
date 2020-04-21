@@ -1,39 +1,37 @@
 package com.yss.rules.datavalidator.facts;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.yss.rules.datavalidator.facts.base.AbstractHandler;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class FactsContext {
-    private final List<AbstractHandler> handlerExecuteQueue = Lists.newLinkedList();
-    private List<Map<String,Object>> sourceData;
-    private Map<String,Object> rstMsg;
+    private final List<AbstractHandler> handlers = Lists.newLinkedList();
 
+    public FactsContext _self(){
+        return this;
+    }
     public void insertHandler(AbstractHandler handler){
-        handlerExecuteQueue.add(handler);
+        handlers.add(handler);
     }
 
-    public FactsContext rstMsg(Map<String,Object> rstMsg){
-        this.rstMsg = rstMsg;
-        return this;
+    public FactsContext option(){
+        return _self();
     }
     public void initHandler(Consumer<FactsContext> function){
         function.accept(this);
     }
-    public FactsContext sourceData(List<Map<String,Object>> sourceData){
-        this.sourceData = sourceData;
-        return this;
-    }
 
     public void execute() {
-        handlerExecuteQueue.forEach(AbstractHandler::doHandler);
+        handlers.forEach(AbstractHandler::doHandler);
     }
 
-    public List<Object> getResult() {
-        return handlerExecuteQueue.stream().map(abstractHandler -> abstractHandler.result).collect(Collectors.toList());
+    public Map<Object, Object> result() {
+        Map<Object, Object> rts = Maps.newHashMap();
+        handlers.forEach(abstractHandler -> rts.put(abstractHandler.getHandlerName(),abstractHandler.result));
+        return rts;
     }
 }

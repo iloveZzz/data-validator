@@ -19,14 +19,13 @@ import java.util.stream.Collectors;
  * @date 2020/4/9 17:46
  */
 public class FactsGenerator {
-    private final FactsContext factsContext = new FactsContext();;
+    private final FactsContext factsContext = new FactsContext();
     public FactsGenerator(final FactModel factModel){
         //事实接入的字段
         Map<String, FactField> factFieldMap = factModel.getFactField().stream().collect(Collectors.toMap(FactField::getField, v -> v, (o, n) -> n, HashMap::new));
-        Map<String,Object> rstMsg = Maps.newHashMap();
         final List<Map<String, Object>> sourceDataMap = getSourceDataMap(factModel.getData(), factFieldMap);
         factsContext
-                .rstMsg(rstMsg)
+                .option()
                 .initHandler(factsContext->{
                     //需要预处理和计算的字段
                     factsContext.insertHandler(new FactSqlDataSetHandler(
@@ -56,9 +55,9 @@ public class FactsGenerator {
      * 执行字段数据处理的句柄
      * @return FactDTO
      */
-    public List<Object> generateFact(){
+    public Map<Object, Object> generateFact(){
         factsContext.execute();
-        return factsContext.getResult();
+        return factsContext.result();
     }
 
     /**
