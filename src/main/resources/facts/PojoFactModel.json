@@ -1,7 +1,7 @@
 {
   "factSqlDataSets": [
     {
-      "db": "report_220",
+      "db": "local",
       "param": {
         "id2": "报表通用列3"
       },
@@ -12,7 +12,7 @@
       "fieldName": "测试数据集"
     },
     {
-      "db": "report_220",
+      "db": "local",
       "param": {
         "id2": "报表通用列3"
       },
@@ -59,6 +59,12 @@
       "field":"isAdult",
       "fieldName": "是否成年",
       "expression":"age>17?true:false"
+    },
+    {
+      "type": "String",
+      "field":"PARAM_NAME",
+      "fieldName": "sql数据字段",
+      "expression":"tests[0].PARAM_NAME"
     }
   ],
   "factFilterField": [

@@ -16,13 +16,13 @@ class FactsFun {
     FactsScriptShell factsScriptShell = new FactsScriptShell(binding)
     BiFunction sqlFunc = { Map<String,Object> bindVar, FactSqlDataSet field ->
         def sqlDataSet = field.param? SqlExecutor.query(field.db, field.sqlExpress,field.param):SqlExecutor.query(field.db, field.sqlExpress)
-        binding.setVariable("sqlDataSet",sqlDataSet)
+        binding.setVariable(field.field,sqlDataSet)
         sqlDataSet
     }
-    BiFunction computeFunc = { sourceList, allField ->
+    BiFunction computeFunc = { source, allField ->
         Script script = ObjectCache.getIfNull(allField.expression,{ -> factsScriptShell.parse(allField.expression) })
-        sourceList.forEach({k,v->script.setProperty(k,v)});
-        script.setProperty("source",sourceList);
+        source.forEach({k,v->script.setProperty(k,v)});
+        script.setProperty("source",source);
         def computeField = script.run()
         computeField
     }
