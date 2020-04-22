@@ -1,7 +1,7 @@
 {
   "factSqlDataSets": [
     {
-      "db": "local",
+      "db": "report_220",
       "param": {
         "id2": "报表通用列3"
       },
@@ -12,7 +12,7 @@
       "fieldName": "测试数据集"
     },
     {
-      "db": "local",
+      "db": "report_220",
       "param": {
         "id2": "报表通用列3"
       },

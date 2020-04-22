@@ -6,6 +6,7 @@ import com.yss.rules.datavalidator.facts.handler.FactFieldFilterAggHandler;
 import com.yss.rules.datavalidator.facts.handler.FactFilterFieldHandler;
 import com.yss.rules.datavalidator.facts.handler.FactHandler;
 import com.yss.rules.datavalidator.facts.handler.FactSqlDataSetHandler;
+import com.yss.rules.datavalidator.function.FactsFun;
 import com.yss.rules.datavalidator.model.*;
 import com.yss.rules.datavalidator.model.base.FactField;
 import org.springframework.cglib.beans.BeanMap;
@@ -28,25 +29,26 @@ public class FactsGenerator {
                 .option()
                 .initHandler(handlers->{
                     //需要预处理和计算的字段
+                    FactsFun factsFun = new FactsFun();
                     handlers.add(new FactSqlDataSetHandler(
                             factModel.getFactSqlDataSets().stream().collect(Collectors.toMap(FactSqlDataSet::getField, v -> v, (o, n) -> n, HashMap::new)),
                             Maps.newHashMap(),
-                            factModel.getFactsFun().getSqlFunc()));
+                           factsFun.getSqlFunc()));
 
                     handlers.add(new FactHandler(
                             factModel.getFactCompute().stream().collect(Collectors.toMap(FactCompute::getField, v -> v, (o, n) -> n, HashMap::new)),
                             sourceDataMap,
-                            factModel.getFactsFun().getComputeFunc()));
+                           factsFun.getComputeFunc()));
 
                     handlers.add(new FactFilterFieldHandler(
                             factModel.getFactFilterField().stream().collect(Collectors.toMap(FactFilterField::getField, v -> v, (o, n) -> n, HashMap::new)),
                             sourceDataMap,
-                            factModel.getFactsFun().getFilterFieldFunc()));
+                           factsFun.getFilterFieldFunc()));
 
                     handlers.add(new FactFieldFilterAggHandler(
                             factModel.getFactFieldFilterAgg().stream().collect(Collectors.toMap(FactFieldFilterAgg::getField, v -> v, (o, n) -> n, HashMap::new)),
                             sourceDataMap,
-                            factModel.getFactsFun().getAggFunction()));
+                           factsFun.getAggFunction()));
                 });
 
     }

@@ -33,7 +33,6 @@ class FactsJg {
             uu.add(new User("dmz"+i,(15+i),LocalDateTime.now()))
         }
         factModel.data = uu
-        factModel.factsFun = new FactsFun()
         for (int i = 0; i <1; i++) {
             def generater = new FactsGenerator(factModel)
             def start = System.currentTimeMillis()

@@ -18,5 +18,4 @@ public class FactModel {
     private List<FactFieldFilterAgg> factFieldFilterAgg;
     private List<FactFilterField> factFilterField;
     private List<Object> data;
-    private FactsFun factsFun;
 }
